@@ -4,26 +4,51 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.stereotype.*;
 import model.Product;
 import services.DeliveryService;
 import services.ProductService;
 
 
 
-@RestController
-public class Controller {
-	//http://localhost:8080/productsearch
+@Controller
+//@RestController
+public class ApplicationController {
 	
-	//@Autowired
-	//ProductService productService;
 	
-	//Metapack mock
+	//@GetMapping("/login")
+	@RequestMapping(value="/login",method=RequestMethod.GET)
+	public String loginPage()
+	{
+		return "login";
+		
+	}
+	@RequestMapping(value="/login",method=RequestMethod.POST)
+	public String welcomePage(ModelMap model,@RequestParam(name = "userId", required = false) String userId, @RequestParam(name = "password", required = false) String password)
+	{
+		
+		
+		if(userId.trim().equals("admin")&&password.trim().equals("root"))
+		{
+			System.out.println(userId+"(((((((((((((((((((((");
+			model.put("User", userId);
+		    return "welcome";
+		}
+		model.put("errorMsg", "Please provide the correct user id and password"+userId);
+		return "login";
+		
+	}
 	@PostMapping("/v1/carrieravailability/bquk/deliveryDates")
 	public HashMap<String,List<DeliveryService>> createDeliveryDate(@RequestBody DeliveryService service) 
 	{
